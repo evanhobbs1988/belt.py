@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>dash</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   {% load staticfiles %}
+   <link rel="stylesheet" href="{% static 'belt_test/css/styles.css' %}">
+</head>
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logoff">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="hero-unit">
+        <h2>Hello {{ request.session.username}}</h2>
+      <h3>Your wish list
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Added by</th>
+          <th>Date Added</th>
+          <th>Actions</th>
+        </tr>
+        {% for wish in mywishlist%}
+        <tr>
+          <td><a href="/wish_items/{{ wish.id }}">{{ wish.name }}</a></td>
+          <td>{{ wish_creator }}</td>
+          <td>{{ wish.created_at }}</td>
+          <td>
+            {% if wish.creator.username == request.session.username %}
+            <a href="/wish_items/delete/{{wish.id }}">Delete</a>
+            {% else %}
+            <a href="/wish_items/remove/{{wish.id }}">Remove from list</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <h3>Other User's list
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Added by</th>
+          <th>Date Added</th>
+          <th>Actions</th>
+        </tr>
+        {% for wish in otherwishlist%}
+        <tr>
+          <td><a href="/wish_items/{{ wish.id }}">{{ wish.name }}</a></td>
+          <td>{{ wish_creator }}</td>
+          <td>{{ wish.created_at }}</td>
+          <td>
+            <a href="/wish_items/add/{{wish.id }}">Add to my Wishes</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      {% for wish in allwishlist%}
+      <tr>
+        <td><a href="/wish_items/{{ wish.id }}">{{ wish.name }}</a></td>
+        <td>{{ wish_creator }}</td>
+        <td>{{ wish.created_at }}</td>
+        <td>
+          <a href="/wish_items/add/{{wish.id }}">Add to my Wishes</a>
+        </td>
+      </tr>
+      {% endfor %}
+
+      <a href="/wish_items/create_item">Add item</a>
+    </div>
+  </div>
+</body>
+</html>
